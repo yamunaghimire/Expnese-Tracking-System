@@ -17,6 +17,7 @@ export default function Navbar() {
             Authorization: `Bearer ${token}`,
           },
         });
+        console.log('Username:', response.data.name);
         setName(response.data.name);
       } catch (error) {
         console.error('Failed to fetch user name:', error);
@@ -36,5 +37,6 @@ export default function Navbar() {
         <button className='m-1 w-8 h-8 rounded-full border-2'>P</button>
       </div>
     </div>
+    
   );
 }

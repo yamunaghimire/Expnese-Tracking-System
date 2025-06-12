@@ -3,7 +3,9 @@ import os
 from datetime import timedelta
 
 
+
 load_dotenv()
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 class ApplicationConfig:
@@ -12,7 +14,9 @@ class ApplicationConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS= False
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = r"sqlite:///.db.sqlite"
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(weeks=1)   
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(weeks=1)  
+    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'} 
     
 
 

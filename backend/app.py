@@ -1,20 +1,31 @@
-from flask import Flask, request, abort, jsonify
+import os
+from flask import Flask, request, abort, jsonify, send_from_directory
 from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager, create_access_token,
     jwt_required, get_jwt_identity
 )
 from flask_bcrypt import Bcrypt
+from werkzeug.utils import secure_filename
 from config import ApplicationConfig
-from models import db, User
+from models import db, User, UploadedImage
+from preprocessing import preprocess_image_cv2
+from ocr import extract_text_from_image
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True) 
+CORS(app,
+    resources={r"/*": {"origins": ["http://localhost:5173"]}},
+    supports_credentials=True,
+    allow_headers=["Content-Type", "Authorization"],
+    methods=["GET", "POST", "OPTIONS"]
+)
+
 app.config.from_object(ApplicationConfig)
 
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config["JWT_HEADER_NAME"] = "Authorization"
 app.config["JWT_HEADER_TYPE"] = "Bearer"
+
 
 
 
@@ -74,7 +85,7 @@ def login_user():
         abort(401, description="Invalid credentials")
     
     # Create JWT token
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id))
 
 
 
@@ -100,6 +111,72 @@ def get_user():
 
     except Exception as e:
         return jsonify({"error": "Something went wrong", "details": str(e)}), 500
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
+        
+
+@app.route('/api/upload', methods=['POST'])
+@jwt_required()
+def upload_file():
+    if request.method == 'OPTIONS':
+        return jsonify({'message': 'Preflight OK'}), 200
+
+    current_user_id = get_jwt_identity()
+
+    if 'image' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['image']
+
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+
+        # Save original info in DB first
+        image = UploadedImage(
+            filename=filename,
+            filepath=filepath,
+            user_id=current_user_id
+        )
+        db.session.add(image)
+        db.session.commit()
+
+        # Preprocess original image and save processed separately
+        processed_filepath = preprocess_image_cv2(filepath)
+
+         # Extract text from processed image using OCR
+        extracted_text = extract_text_from_image(processed_filepath)
+
+
+        # Update DB with processed image path
+        image.processed_filepath = processed_filepath
+        db.session.commit()
+
+        return jsonify({
+            'message': 'Image uploaded and preprocessed successfully',
+            'id': image.id,
+            'original_path': filepath,
+            'processed_path': processed_filepath,
+            'extracted_text': extracted_text
+
+        }), 201
+
+    return jsonify({'error': 'File type not allowed'}), 400
+    
+# @app.route('/reset-db', methods=['POST'])
+# def reset_db():
+#     db.drop_all()
+#     db.create_all()
+#     return jsonify({"message": "Database reset successfully!"})
+
+
 
 
 if __name__ == '__main__':
