@@ -19,3 +19,12 @@ class UploadedImage(db.Model):
     processed_filepath = db.Column(db.String(255), nullable=True)
     upload_time = db.Column(db.DateTime, default=datetime.utcnow)  # Date and time of upload
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+class Budget(db.Model):
+    __tablename__ = 'budgets'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    month = db.Column(db.String(20), nullable=False)  # e.g., "June"
+    category = db.Column(db.String(50), nullable=False)  # e.g., "Groceries"
+    amount = db.Column(db.Float, nullable=False)

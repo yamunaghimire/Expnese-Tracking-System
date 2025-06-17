@@ -1,5 +1,5 @@
-import os
 from flask import Flask, request, abort, jsonify, send_from_directory
+import os
 from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager, create_access_token,
@@ -8,7 +8,7 @@ from flask_jwt_extended import (
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
 from config import ApplicationConfig
-from models import db, User, UploadedImage
+from models import db, User, UploadedImage, Budget
 from preprocessing import preprocess_image_cv2
 from ocr import extract_text_from_image
 
@@ -41,7 +41,7 @@ with app.app_context():
 def home():
     return "Backend server is running!"
 
-@app.route("/register", methods=["POST"])
+@app.route("/api/register", methods=["POST"])
 def register_user():
     data = request.get_json()
 
@@ -68,7 +68,7 @@ def register_user():
         "email": new_user.email,
     }), 201
 
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login_user():
     data = request.get_json()
 
@@ -169,6 +169,64 @@ def upload_file():
         }), 201
 
     return jsonify({'error': 'File type not allowed'}), 400
+
+@app.route('/api/budget', methods=['POST'])
+@jwt_required()
+def create_or_update_multiple_budgets():
+    data = request.json
+    user_id = get_jwt_identity()
+    month = data.get('month')
+    budget_list = data.get('budgets')
+
+    if not month or not isinstance(budget_list, list):
+        return jsonify({'error': 'Month and budget list required'}), 400
+
+    for item in budget_list:
+        category = item.get('category')
+        amount = item.get('amount')
+
+        if not category or amount is None:
+            continue  # skip invalid entries
+
+        existing = Budget.query.filter_by(user_id=user_id, month=month, category=category).first()
+        if existing:
+            existing.amount = amount
+        else:
+            new_entry = Budget(user_id=user_id, month=month, category=category, amount=amount)
+            db.session.add(new_entry)
+
+    db.session.commit()
+    return jsonify({'message': 'Budgets saved successfully'}), 200
+
+@app.route('/api/budget/<month>', methods=['GET'])
+@jwt_required()
+def get_budgets_for_month(month):
+    user_id = get_jwt_identity()
+    budgets = Budget.query.filter_by(user_id=user_id, month=month).all()
+
+    results = [
+        {
+            "category": budget.category,
+            "amount": budget.amount
+        }
+        for budget in budgets
+    ]
+
+    return jsonify(results), 200
+
+@app.route('/api/budget/months', methods=['GET'])
+@jwt_required()
+def get_all_budgeted_months():
+    user_id = get_jwt_identity()
+    months = (
+        db.session.query(Budget.month)
+        .filter_by(user_id=user_id)
+        .distinct()
+        .all()
+    )
+    unique_months = [m[0] for m in months]
+    return jsonify(unique_months), 200
+
     
 # @app.route('/reset-db', methods=['POST'])
 # def reset_db():
