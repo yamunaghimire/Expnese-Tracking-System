@@ -12,6 +12,9 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
 
+    receipts = db.relationship("Receipt", backref="user", lazy=True)
+    budgets = db.relationship("Budget", backref="user", lazy=True)
+
 class UploadedImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(120), nullable=False)
@@ -28,3 +31,9 @@ class Budget(db.Model):
     month = db.Column(db.String(20), nullable=False)  # e.g., "June"
     category = db.Column(db.String(50), nullable=False)  # e.g., "Groceries"
     amount = db.Column(db.Float, nullable=False)
+    
+class ExtractedReceiptData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    receipt_id = db.Column(db.Integer, db.ForeignKey('uploaded_image.id'), nullable=False)
+    label = db.Column(db.String(50), nullable=False)   # e.g. STORE, BILL_NO, etc.
+    value = db.Column(db.Text, nullable=False)         # e.g. "Mega Mart Pvt. Ltd."

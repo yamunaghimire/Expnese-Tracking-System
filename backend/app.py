@@ -1,5 +1,7 @@
 from flask import Flask, request, abort, jsonify, send_from_directory
 import os
+import spacy
+import re
 from flask_cors import CORS
 from flask_jwt_extended import (
     JWTManager, create_access_token,
@@ -8,7 +10,7 @@ from flask_jwt_extended import (
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
 from config import ApplicationConfig
-from models import db, User, UploadedImage, Budget
+from models import db, User, UploadedImage, Budget, ExtractedReceiptData 
 from preprocessing import preprocess_image_cv2
 from ocr import extract_text_from_image
 
@@ -34,12 +36,15 @@ db.init_app(app)
 
 jwt = JWTManager(app)
 
+ner_model = spacy.load("custom_receipt_ner")
+
 with app.app_context():
     db.create_all()
     
 @app.route("/")
 def home():
     return "Backend server is running!"
+
 
 @app.route("/api/register", methods=["POST"])
 def register_user():
@@ -130,7 +135,6 @@ def upload_file():
         return jsonify({'error': 'No file part'}), 400
 
     file = request.files['image']
-
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
 
@@ -139,7 +143,7 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
 
-        # Save original info in DB first
+        # Save to DB
         image = UploadedImage(
             filename=filename,
             filepath=filepath,
@@ -148,27 +152,52 @@ def upload_file():
         db.session.add(image)
         db.session.commit()
 
-        # Preprocess original image and save processed separately
+        # Preprocess + OCR
         processed_filepath = preprocess_image_cv2(filepath)
-
-         # Extract text from processed image using OCR
         extracted_text = extract_text_from_image(processed_filepath)
+        # # Clean OCR text
+        # extracted_text = clean_ocr_text(extracted_text)
+        print("[📝 Extracted Text]")
+        print(extracted_text)
 
 
-        # Update DB with processed image path
+        # Update image with processed path
         image.processed_filepath = processed_filepath
         db.session.commit()
 
+        # --- NER START ---
+        doc = ner_model(extracted_text)
+        extracted_entities = []
+        for ent in doc.ents:
+            entity = ExtractedReceiptData(
+                receipt_id=image.id,
+                label=ent.label_,
+                value=ent.text
+            )
+            db.session.add(entity)
+            extracted_entities.append({
+                'label': ent.label_,
+                'value': ent.text
+            })
+        db.session.commit()
+        # --- NER END ---
+
         return jsonify({
-            'message': 'Image uploaded and preprocessed successfully',
+            'message': 'Image uploaded, preprocessed, OCR done, NER extracted',
             'id': image.id,
             'original_path': filepath,
             'processed_path': processed_filepath,
-            'extracted_text': extracted_text
-
+            'extracted_text': extracted_text,
+            'entities': extracted_entities
         }), 201
 
     return jsonify({'error': 'File type not allowed'}), 400
+
+
+
+
+
+
 
 @app.route('/api/budget', methods=['POST'])
 @jwt_required()
@@ -234,7 +263,57 @@ def get_all_budgeted_months():
 #     db.create_all()
 #     return jsonify({"message": "Database reset successfully!"})
 
+# @app.route('/api/upload', methods=['POST'])
+# @jwt_required()
+# def upload_file():
+#     if request.method == 'OPTIONS':
+#         return jsonify({'message': 'Preflight OK'}), 200
 
+#     current_user_id = get_jwt_identity()
+
+#     if 'image' not in request.files:
+#         return jsonify({'error': 'No file part'}), 400
+
+#     file = request.files['image']
+
+#     if file.filename == '':
+#         return jsonify({'error': 'No selected file'}), 400
+
+#     if file and allowed_file(file.filename):
+#         filename = secure_filename(file.filename)
+#         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#         file.save(filepath)
+
+#         # Save original info in DB first
+#         image = UploadedImage(
+#             filename=filename,
+#             filepath=filepath,
+#             user_id=current_user_id
+#         )
+#         db.session.add(image)
+#         db.session.commit()
+
+#         # Preprocess original image and save processed separately
+#         processed_filepath = preprocess_image_cv2(filepath)
+
+#          # Extract text from processed image using OCR
+#         extracted_text = extract_text_from_image(processed_filepath)
+
+
+#         # Update DB with processed image path
+#         image.processed_filepath = processed_filepath
+#         db.session.commit()
+
+#         return jsonify({
+#             'message': 'Image uploaded and preprocessed successfully',
+#             'id': image.id,
+#             'original_path': filepath,
+#             'processed_path': processed_filepath,
+#             'extracted_text': extracted_text
+
+#         }), 201
+
+#     return jsonify({'error': 'File type not allowed'}), 400
 
 
 if __name__ == '__main__':
