@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 import Login from './Login';
 import Navbar from '../components/navbar';
+// import ScanActionButton from '../components/ScanActionButton';
 // import ImageUploader from '../components/ImageUploader';
 import SpendingCard from '../components/SpendingCard';
 import SavingsBanner from '../components/SavingsBanner';
@@ -11,8 +12,12 @@ import TimeFilterTabs from '../components/TimeFilterTabs';
 import BottomNavBar from '../components/BottomNavbar';
 import SpendingTrendChart from '../components/SpendingTrendChart';
 import BudgetBreakdown from '../components/BudgetBreakdown';
+// import ReceiptProcessor from '../components/ReceiptProcessor';
+
+
 
 export default function Homepage() {
+  
   return (
     <div>
       <Navbar/>
@@ -23,10 +28,13 @@ export default function Homepage() {
       <BudgetBreakdown/>
       {/* <ManualEntryForm/>
       <ScannedEntryForm/> */}
+       {/* <ReceiptProcessor/> */}
       <BottomNavBar/>
       
       
-      {/* <div><ImageUploader/></div> */}
+      <div>
+      
+    </div>
 
       
       

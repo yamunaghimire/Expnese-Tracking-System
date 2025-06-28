@@ -6,6 +6,7 @@ import ManualEntryForm from './components/ManualEntryForm';
 import Profile from './pages/Profile';
 import BudgetPage from './pages/BudgetPage';
 import ViewBudgetsPage from './pages/ViewBudget';
+import ReceiptsPage from './pages/ReceiptsPage';
 
 export default function App() {
   return (
@@ -19,6 +20,8 @@ export default function App() {
            <Route path="/profile" element={<Profile/>} />
            <Route path="/budget" element={<BudgetPage/>} />
            <Route path="/view-budgets" element={<ViewBudgetsPage/>} />
+            <Route path="/receipts" element={<ReceiptsPage/>} />
+           
 
     
       </Routes>
