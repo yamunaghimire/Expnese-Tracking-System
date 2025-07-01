@@ -13,3 +13,6 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Ignore all Mistral model files
+*.gguf
