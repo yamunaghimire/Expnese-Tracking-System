@@ -1,18 +1,60 @@
+# # Node modules
+# client/node_modules/
+
+# # Python
+# backend/__pycache__/
+# *.pyc
+# env/
+# venv/
+
+# # Environment
+# *.env
+
+# # OS
+# .DS_Store
+# Thumbs.db
+
+# # Ignore all Mistral model files
+# *.gguf
+
+
 # Node modules
 client/node_modules/
 
-# Python
-backend/__pycache__/
-*.pyc
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
 env/
 venv/
 
-# Environment
+# Environment files
 *.env
 
-# OS
+# OS system files
 .DS_Store
 Thumbs.db
 
-# Ignore all Mistral model files
+# Databases
+*.sqlite
+
+# Ignore Mistral LLM and large model files
 *.gguf
+*.bin
+*.pth
+
+# Ignore uploaded/generated files (optional — adjust if needed)
+uploads/
+processed_receipt*
+
+# Ignore images (optional if they aren't needed in Git)
+*.jpg
+*.jpeg
+*.png
+
+# Vite/Frontend build
+dist/
+build/
+.vite/
