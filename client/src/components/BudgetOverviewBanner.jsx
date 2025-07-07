@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaPieChart } from "react-icons/fa";
+import { FaChartPie } from "react-icons/fa";  // ✅ Correct icon name
 
 const BudgetOverviewBanner = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/budget-overview"); // adjust route if needed
+    navigate("/budget-overview"); // Adjust path as needed
   };
 
   return (
@@ -16,9 +16,9 @@ const BudgetOverviewBanner = () => {
     >
       <div>
         <h2 className="text-lg font-semibold text-green-800 mb-1">View Budget Overview</h2>
-        <p className="text-sm text-green-700">See how you're tracking your monthly budgets</p>
+        {/* <p className="text-sm text-green-700">See how you're tracking your monthly budgets</p> */}
       </div>
-      <FaPieChart className="text-2xl text-green-700" />
+      <FaChartPie className="text-2xl text-green-700" />
     </div>
   );
 };

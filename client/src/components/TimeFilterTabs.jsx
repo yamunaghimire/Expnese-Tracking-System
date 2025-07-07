@@ -1,23 +1,24 @@
-import React, { useState } from 'react';
+import React from "react";
 
-const TimeFilterTabs = () => {
-  const [active, setActive] = useState('Today');
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
-  const tabs = ['Today', 'Week', 'Month', 'Year'];
-
+const TimeFilterTabs = ({ selectedMonth, onSelectMonth }) => {
   return (
-    <div className="flex justify-between bg-white border border-gray-100 rounded-full mx-[24px] mt-4 p-1">
-      {tabs.map((tab) => (
+    <div className="flex overflow-x-auto space-x-3 py-2 px-1 mt-2 mb-4 scrollbar-hide mx-[20px]">
+      {months.map((month) => (
         <button
-          key={tab}
-          onClick={() => setActive(tab)}
-          className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${
-            active === tab
-              ? 'bg-orange-100 text-orange-500'
-              : 'text-gray-400'
+          key={month}
+          onClick={() => onSelectMonth(month)}
+          className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
+            selectedMonth === month
+              ? "bg-green-600 text-white"
+              : "bg-gray-200 text-gray-700"
           }`}
         >
-          {tab}
+          {month.slice(0, 3)}
         </button>
       ))}
     </div>
@@ -25,3 +26,4 @@ const TimeFilterTabs = () => {
 };
 
 export default TimeFilterTabs;
+

@@ -4,26 +4,28 @@ import { FiShoppingBag } from 'react-icons/fi';
 
 const SpendingCard = () => {
   const [amount, setAmount] = useState(null);
+  const [error, setError] = useState(null);  // Track error
 
   useEffect(() => {
     const fetchAmount = async () => {
       try {
         const token = localStorage.getItem('access_token');
         if (!token) {
-          console.warn('No token found in localStorage');
-          return;
+          throw new Error("No access token");
         }
 
-        const response = await axios.get('http://localhost:5000/api/amount', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get('http://localhost:5000/api/expenses/total', {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log('Fetched amount:', response.data.amount);
+        if (!response.data || typeof response.data.amount !== 'number') {
+          throw new Error("Invalid response format");
+        }
+
         setAmount(response.data.amount);
-      } catch (error) {
-        console.error('Failed to fetch amount:', error);
+      } catch (err) {
+        console.error('Failed to fetch total amount:', err);
+        setError("Could not load spending data.");
       }
     };
 
@@ -31,13 +33,18 @@ const SpendingCard = () => {
   }, []);
 
   return (
-    <div className="mx-[30px] pt-2">
-      <div className="flex items-center text-black text-[15px] mb-1">
-        <FiShoppingBag className="w-5 h-5 text-gray-500 mr-1" />
-        <span>You’ve spent</span>
-      </div>
-      <div className="text-3xl font-bold text-black">
-        {amount !== null ? `Rs. ${amount}` : 'Loading...'}
+    <div className="mx-5 mt-4">
+      <div className="bg-white p-4 rounded-lg shadow-md border-l-4 border-green-500 flex items-center">
+        <div className="bg-green-100 p-3 rounded-full mr-4">
+          <FiShoppingBag className="text-green-600 text-xl" />
+        </div>
+        <div>
+          <p className="text-sm text-gray-600">You've Spent</p>
+          <p className="text-2xl font-bold text-gray-800">
+            {error ? error :
+              amount !== null ? `Rs. ${amount.toFixed(2)}` : 'Loading...'}
+          </p>
+        </div>
       </div>
     </div>
   );

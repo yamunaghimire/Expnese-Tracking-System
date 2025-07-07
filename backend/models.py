@@ -37,7 +37,7 @@ class Budget(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     
     category_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=False)  # FK to Category
-    month = db.Column(db.String(7), nullable=False)  # e.g., "2025-06"
+    month = db.Column(db.String(7), nullable=False)  
     amount = db.Column(db.Float, nullable=False)
    # Prevent duplicate budget entries for the same user, category, and month
     __table_args__ = (

@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import BudgetPage from './pages/BudgetPage';
 import ViewBudgetsPage from './pages/ViewBudget';
 import ReceiptsPage from './pages/ReceiptsPage';
+import BudgetOverviewPage from './pages/BudgetOverviewPage';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
            <Route path="/budget" element={<BudgetPage/>} />
            <Route path="/view-budgets" element={<ViewBudgetsPage/>} />
             <Route path="/receipts" element={<ReceiptsPage/>} />
+            <Route path="/budget-overview" element={<BudgetOverviewPage/>} />
            
 
     
