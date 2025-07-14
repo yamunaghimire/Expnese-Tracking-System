@@ -15,16 +15,19 @@ const handleProfileClick = () => {
   const handleHomeClick = () => {
     navigate("/"); // change this route to match your router
   };
+  const handleReceiptsClick = () => {
+    navigate("/receipts");
+  };
   return (
-    <div className="relative bg-white border-t shadow-md w-full fixed bottom-0 flex justify-around items-center py-3 z-50">
+   <div className="fixed bottom-0 left-0 right-0 z-50 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] py-3 flex justify-around items-center">
       <div className="flex flex-col items-center text-purple-500">
         <FiHome className="text-xl" onClick={handleHomeClick}/>
         <span className="text-xs mt-1">Home</span>
       </div>
 
-      <div className="flex flex-col items-center text-gray-400">
-        <FiFileText className="text-xl" />
-        <span className="text-xs mt-1">Documents</span>
+      <div className="flex flex-col items-center text-gray-400 ">
+        <FiFileText className="text-xl"  onClick={handleReceiptsClick}/>
+        <span className="text-xs mt-1">Receipts</span>
       </div>
 
       {/* Central Scan Button */}

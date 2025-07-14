@@ -105,7 +105,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { FaWallet, FaPiggyBank } from "react-icons/fa";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -132,8 +131,6 @@ const BudgetVisualizer = ({ month, budgets, expenses }) => {
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-md mt-6">
-      
-      {/* <h2 className="text-xl font-bold mb-6 text-center">{month} Budget Overview</h2> */}
 
       {/* Donut Chart */}
       <div className="flex justify-center mb-6">
@@ -142,29 +139,21 @@ const BudgetVisualizer = ({ month, budgets, expenses }) => {
         </div>
       </div>
 
-      {/* Spent & Remaining Cards */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-blue-100 border-l-4 border-blue-500 p-4 rounded-lg shadow-sm flex items-center">
-          <FaWallet className="text-blue-600 text-2xl mr-3" />
-          <div>
-            <p className="text-sm text-gray-700">Total Spent</p>
-            <p className="text-lg font-bold text-blue-800">Rs {totalSpent.toFixed(2)}</p>
-          </div>
+      {/* Totals Below Donut Chart */}
+      <div className="flex justify-between text-center mt-4 mb-6 px-4">
+        <div>
+          <p className="text-sm text-gray-500">Total Budget</p>
+          <p className="text-lg font-semibold text-gray-800">Rs {totalBudget.toFixed(2)}</p>
         </div>
-        <div className={`p-4 rounded-lg shadow-sm flex items-center ${
-          isExceeded ? "bg-red-100 border-l-4 border-red-500" : "bg-green-100 border-l-4 border-green-500"
-        }`}>
-          <FaPiggyBank className={`text-2xl mr-3 ${
-            isExceeded ? "text-red-600" : "text-green-600"
-          }`} />
-          <div>
-            <p className="text-sm text-gray-700">Budget Remaining</p>
-            <p className={`text-lg font-bold ${
-              isExceeded ? "text-red-700" : "text-green-800"
-            }`}>
-              {isExceeded ? `-Rs ${Math.abs(remaining).toFixed(2)} (Exceeded)` : `Rs ${remaining.toFixed(2)}`}
-            </p>
-          </div>
+        <div>
+          <p className="text-sm text-gray-500">Spent</p>
+          <p className="text-lg font-semibold text-gray-800">Rs {totalSpent.toFixed(2)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Remaining</p>
+          <p className="text-lg font-semibold text-gray-800">
+            {isExceeded ? `-Rs ${Math.abs(remaining).toFixed(2)}` : `Rs ${remaining.toFixed(2)}`}
+          </p>
         </div>
       </div>
 

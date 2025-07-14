@@ -1,6 +1,9 @@
+//unnecessary
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FiUpload, FiPlus } from 'react-icons/fi';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ScannedEntryForm = () => {
   const [billNo, setBillNo] = useState('');
@@ -35,7 +38,7 @@ const ScannedEntryForm = () => {
       setTotal(sum);
     } catch (err) {
       console.error('Error parsing receipt:', err);
-      alert('Failed to process receipt.');
+      toast.error('Failed to process receipt.');
     }
   };
 

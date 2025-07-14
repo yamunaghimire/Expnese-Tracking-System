@@ -73,7 +73,7 @@ export default function Homepage() {
       <Navbar />
 
       {/* Main scrollable content */}
-      <main className="flex-grow ">
+     <main className="flex-grow overflow-y-auto pb-24">
         <SpendingCard />
         <BudgetOverviewBanner/>
         <SpendingTrendChart />
