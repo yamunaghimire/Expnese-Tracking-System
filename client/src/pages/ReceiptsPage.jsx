@@ -202,7 +202,7 @@ const ReceiptsPage = () => {
   const fetchReceipts = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:5000/api/receipts', {
+      const res = await axios.get('http://localhost:5000/api/get-receipts', {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });

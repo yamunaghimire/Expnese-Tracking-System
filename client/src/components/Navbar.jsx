@@ -16,7 +16,7 @@ export default function Navbar() {
           return;
         }
 
-        const response = await axios.get('http://localhost:5000/api/user', {
+        const response = await axios.get('http://localhost:5000/api/getuser', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

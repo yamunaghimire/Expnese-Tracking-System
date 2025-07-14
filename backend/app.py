@@ -117,7 +117,7 @@ def login_user():
         "email": user.email
     }), 200
 
-@app.route('/api/user', methods=['GET'])
+@app.route('/api/getuser', methods=['GET'])
 @jwt_required()
 def get_user():
     try:
@@ -172,7 +172,7 @@ def upload_file():
         except json.JSONDecodeError:
             return jsonify({'error': 'LLM returned invalid JSON'}), 500
 
-        # ✅ Only return extracted data + image path, no DB saving here
+       
         return jsonify({
             'message': 'Image processed successfully.',
             'image_path': image_path,
@@ -314,7 +314,7 @@ def get_expenses_for_month(month):
     category_totals = {}
 
     for receipt in receipts:
-        # 💡 Use created_at for monthly grouping
+        
         if not receipt.created_at or receipt.created_at.strftime("%B") != month:
             continue
 
@@ -331,7 +331,6 @@ def get_expenses_for_month(month):
 def get_monthly_expenses():
     user_id = get_jwt_identity()
 
-    # Always include all 12 months (short format to match frontend)
     all_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     month_totals = {month: 0 for month in all_months}
@@ -341,7 +340,7 @@ def get_monthly_expenses():
     for receipt in receipts:
         if not receipt.created_at:
             continue
-        month_abbr = receipt.created_at.strftime("%b")  # e.g., "Jan", "Feb"
+        month_abbr = receipt.created_at.strftime("%b")  
         if month_abbr in month_totals:
             for item in receipt.items:
                 month_totals[month_abbr] += item.amount or 0
@@ -366,7 +365,7 @@ def get_total_expenses():
     return jsonify({"amount": round(total, 2)}), 200
 
 
-@app.route('/api/receipts', methods=['GET'])
+@app.route('/api/get-receipts', methods=['GET'])
 @jwt_required()
 def get_receipts():
     current_user_id = get_jwt_identity()
@@ -382,7 +381,7 @@ def get_receipts():
                 "rate": item.rate,
                 "amount": item.amount
             }
-            for item in r.items  # uses the relationship in your model
+            for item in r.items  
         ]
 
         result.append({
