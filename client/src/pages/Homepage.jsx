@@ -63,6 +63,7 @@ import BottomNavBar from '../components/BottomNavbar';
 import SpendingTrendChart from '../components/SpendingTrendChart';
 import BudgetBreakdown from '../components/BudgetBreakdown';
 import BudgetOverviewBanner from '../components/BudgetOverviewBanner';
+import PlanInsightsButtons from '../components/PlanInsightsButtons';
 
 export default function Homepage() {
   const [selectedMonth, setSelectedMonth] = useState("July");
@@ -75,6 +76,7 @@ export default function Homepage() {
       {/* Main scrollable content */}
      <main className="flex-grow overflow-y-auto pb-24">
         <SpendingCard />
+        {/* <PlanInsightsButtons/> */}
         <BudgetOverviewBanner/>
         <SpendingTrendChart />
 

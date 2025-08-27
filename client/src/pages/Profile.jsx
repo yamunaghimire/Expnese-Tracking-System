@@ -5,7 +5,7 @@ import { LuSettings } from "react-icons/lu";
 import { GrPlan } from "react-icons/gr";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import BottomNavbar from '../components/BottomNavbar'; // adjust path as needed
+import BottomNavbar from '../components/BottomNavbar';
 
 const Profile = () => {
   const [username, setUsername] = useState('');
@@ -17,7 +17,7 @@ const Profile = () => {
         const token = localStorage.getItem('access_token');
         if (!token) return;
 
-        const response = await axios.get('http://localhost:5000/api/user', {
+        const response = await axios.get('http://localhost:5000/api/getuser', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -52,7 +52,7 @@ const Profile = () => {
           <p className="text-xl font-semibold">{username || '...'}</p>
         </div>
 
-        {/* Options */}
+        
         <div className="mt-10 space-y-6">
           <OptionCard icon={<LuSettings />} label="Account Settings" />
           <OptionCard
@@ -61,7 +61,7 @@ const Profile = () => {
               onClick={() => navigate('/view-budgets')}
 />
 
-          <OptionCard icon={<FaUpload />} label="Export Data" />
+          
           <OptionCard
             icon={<FiLogOut />}
             label="Logout"

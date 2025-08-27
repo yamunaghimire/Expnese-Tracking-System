@@ -37,11 +37,12 @@ class NaiveBayesClassifier:
         return max(scores, key=scores.get)
 
 
-# ✅ Create a function to initialize and train the model
+# Function to initialize and train the model
 def load_naive_bayes_model():
     csv_path = "all-items.csv"
     df = pd.read_csv(csv_path)
-    df["category"] = df["category"].str.lower()
+    # df["category"] = df["category"].str.lower()
+    df["category"] = df["category"].str.strip().str.lower()
     training_data = list(zip(df["item"], df["category"]))
 
     model = NaiveBayesClassifier()

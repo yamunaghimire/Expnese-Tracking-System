@@ -3,17 +3,17 @@ import { FiHome, FiFileText, FiPieChart, FiUser } from 'react-icons/fi';
 import ScanActionButton from './ScanActionButton';
 import { useNavigate } from 'react-router-dom';
 
-const BottomNavBar = () => {
+const BottomNavbar = () => {
   const navigate = useNavigate();
 
 const handleProfileClick = () => {
-    navigate("/profile"); // change this route to match your router
+    navigate("/profile"); 
   };
   const handleBudgetClick = () => {
-    navigate("/budget"); // change this route to match your router
+    navigate("/budget"); 
   };
   const handleHomeClick = () => {
-    navigate("/"); // change this route to match your router
+    navigate("/"); 
   };
   const handleReceiptsClick = () => {
     navigate("/receipts");
@@ -46,4 +46,4 @@ const handleProfileClick = () => {
   );
 };
 
-export default BottomNavBar;
+export default BottomNavbar;

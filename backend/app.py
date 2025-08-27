@@ -19,9 +19,11 @@ from models import db, User, Receipt, Budget, Item, Category
 from ocr.ocr import preprocess_image_cv2, extract_text_from_image
 from ocr.llm import clean_receipt_text, extract_structured_json
 from utils import clean_and_convert_bill_date
-
 from naive_bayes import load_naive_bayes_model
 from services.category_service import categorize_items_for_receipt
+
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 
 
 
@@ -31,7 +33,7 @@ CORS(app,
     resources={r"/*": {"origins": ["http://localhost:5173"]}},
     supports_credentials=True,
     allow_headers=["Content-Type", "Authorization"],
-    methods=["GET", "POST", "OPTIONS"]
+    methods=["GET", "POST", "DELETE", "OPTIONS"]
 )
 
 app.config.from_object(ApplicationConfig)
@@ -48,8 +50,6 @@ db.init_app(app)
 
 jwt = JWTManager(app)
 
-# ner_model = spacy.load("custom_receipt_ner")
-
 with app.app_context():
     db.create_all()
     
@@ -59,6 +59,9 @@ def home():
 
 # Initialize the classifier when the app starts
 classifier = load_naive_bayes_model()
+
+mail = Mail(app)
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 @app.route("/api/register", methods=["POST"])
@@ -184,11 +187,13 @@ def upload_file():
 @app.route('/api/save-receipt', methods=['POST'])
 @jwt_required()
 def save_receipt():
+    from datetime import datetime
     current_user_id = get_jwt_identity()
     data = request.get_json()
 
     image_path = data.get('image_path')
-    bill_date_obj = clean_and_convert_bill_date(data.get("billDate"))
+    # bill_date_obj = clean_and_convert_bill_date(data.get("billDate"))
+    bill_date_obj = clean_and_convert_bill_date(data.get("billDate")) or datetime.utcnow()
 
     # Save receipt
     receipt = Receipt(
@@ -383,19 +388,80 @@ def get_receipts():
             }
             for item in r.items  
         ]
+        receipt_date = r.bill_date or r.created_at
 
         result.append({
             "id": r.id,
             "merchant_name": r.merchant_name,
             "address": r.address,
             "bill_number": r.bill_number,
-            "bill_date": r.bill_date.isoformat() if r.bill_date else None,
+            # "bill_date": r.bill_date.isoformat() if r.bill_date else None,
+            "bill_date": receipt_date.isoformat() if receipt_date else None,
             "total_amount": r.total_amount,
             "image_path": r.image_path,
             "items": item_data
         })
 
     return jsonify({"receipts": result}), 200
+
+@app.route('/api/receipts/<int:receipt_id>', methods=['DELETE'])
+@jwt_required()
+def delete_receipt(receipt_id):
+    user_id = get_jwt_identity()
+    receipt = Receipt.query.filter_by(id=receipt_id, user_id=user_id).first()
+    if not receipt:
+        return jsonify({"error": "Receipt not found"}), 404
+
+    db.session.delete(receipt)
+    db.session.commit()
+    return jsonify({"message": "Receipt deleted successfully"}), 200
+
+
+@app.route('/api/forgot-password', methods=['POST'])
+def forgot_password():
+    data = request.get_json()
+    email = data.get("email")
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "Email not registered"}), 400
+
+    # generate token
+    token = serializer.dumps(user.email, salt='password-reset-salt')
+    reset_link = f"http://localhost:5173/reset-password/{token}"  
+
+    # send mail
+    msg = Message("Password Reset Request", recipients=[user.email])
+    msg.body = f"Click the link to reset your password: {reset_link}\n\nThis link will expire in 1 hour."
+    mail.send(msg)
+
+    return jsonify({"message": "Password reset email sent"}), 200
+
+
+@app.route('/api/reset-password/<token>', methods=['POST'])
+def reset_password(token):
+    try:
+        email = serializer.loads(token, salt='password-reset-salt', max_age=3600)  
+    except SignatureExpired:
+        return jsonify({"error": "Token expired"}), 400
+    except BadSignature:
+        return jsonify({"error": "Invalid token"}), 400
+
+    data = request.get_json()
+    new_password = data.get("password")
+
+    if not new_password:
+        return jsonify({"error": "Password required"}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    user.password = bcrypt.generate_password_hash(new_password).decode("utf-8")
+    db.session.commit()
+
+    return jsonify({"message": "Password reset successful"}), 200
+
 
     
 

@@ -47,9 +47,9 @@ export default function Navbar() {
         >
           <FiPlus size={18} />
         </button>
-        <button className="m-1 text-2xl text-gray-700">
+        {/* <button className="m-1 text-2xl text-gray-700">
           <FiBell />
-        </button>
+        </button> */}
       </div>
     </div>
   );
