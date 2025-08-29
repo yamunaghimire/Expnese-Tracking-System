@@ -17,6 +17,7 @@ class ApplicationConfig:
     SQLALCHEMY_ECHO = True
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(weeks=1)  
     UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+    PREPROCESSED_FOLDER = os.path.join(BASE_DIR, 'preprocessed_images')
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'} 
     # Flask-Mail config (loaded from .env)
     MAIL_SERVER = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
@@ -25,6 +26,9 @@ class ApplicationConfig:
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
+
+    
+
     
 
 

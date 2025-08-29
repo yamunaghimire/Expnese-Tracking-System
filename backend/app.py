@@ -25,7 +25,7 @@ from services.category_service import categorize_items_for_receipt
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 
-
+import cv2
 
 
 app = Flask(__name__)
@@ -41,6 +41,10 @@ app.config.from_object(ApplicationConfig)
 app.config["JWT_TOKEN_LOCATION"] = ["headers"]
 app.config["JWT_HEADER_NAME"] = "Authorization"
 app.config["JWT_HEADER_TYPE"] = "Bearer"
+# Ensure upload folders exist
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+os.makedirs(app.config['PREPROCESSED_FOLDER'], exist_ok=True)
+
 
 
 
@@ -73,12 +77,12 @@ def register_user():
     password = data.get("password")
 
     if not username or not email or not password:
-        abort(400, description="Missing required fields")
+        return jsonify({"error": "Missing required fields"}), 400
 
     user_exists = User.query.filter_by(email=email).first() is not None
 
     if user_exists:
-        abort(409, description="User with this email already exists")
+        return jsonify({"error": "User with this email already exists"}), 409
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     new_user = User(username=username, email=email, password=hashed_password)
@@ -99,13 +103,16 @@ def login_user():
     password = data.get("password")
 
     if not email or not password:
-        abort(400, description="Missing email or password")
+        return jsonify({"error": "Missing email or password"}), 400
 
     user = User.query.filter_by(email=email).first()
     
 
-    if user is None or not bcrypt.check_password_hash(user.password, password):
-        abort(401, description="Invalid credentials")
+    if user is None:
+        return jsonify({"error": "User not registered"}), 404
+    
+    if not bcrypt.check_password_hash(user.password, password):
+        return jsonify({"error": "Invalid password"}), 401
     
     # Create JWT token
     access_token = create_access_token(identity=str(user.id))
@@ -141,8 +148,7 @@ def allowed_file(filename):
 
 
 
-@app.route('/api/upload', methods=['POST'])
-@jwt_required()
+@app.route('/api/upload', methods=['POST', 'OPTIONS'])
 def upload_file():
     if request.method == 'OPTIONS':
         return jsonify({'message': 'Preflight OK'}), 200
@@ -161,6 +167,11 @@ def upload_file():
 
         # OCR Processing
         gray = preprocess_image_cv2(image_path)
+        # Save preprocessed image in a separate folder
+        preprocessed_filename = "preprocessed_" + filename
+        preprocessed_path = os.path.join(app.config['PREPROCESSED_FOLDER'], preprocessed_filename)
+        cv2.imwrite(preprocessed_path, gray)
+
         extracted_text = extract_text_from_image(gray)
         print("Extracted Text:")
         print("-" * 50)
@@ -173,16 +184,18 @@ def upload_file():
         try:
             data = json.loads(structured_json)
         except json.JSONDecodeError:
-            return jsonify({'error': 'LLM returned invalid JSON'}), 500
+            data = {}
 
        
         return jsonify({
             'message': 'Image processed successfully.',
             'image_path': image_path,
+            'preprocessed_path': preprocessed_path,
             'data': data
         }), 200
 
     return jsonify({'error': 'File type not allowed'}), 400
+
 
 @app.route('/api/save-receipt', methods=['POST'])
 @jwt_required()

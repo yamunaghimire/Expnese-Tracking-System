@@ -114,3 +114,5 @@ const EditableForm = ({ data, setData, handleConfirm, handleClose }) => {
 };
 
 export default EditableForm;
+
+

@@ -65,23 +65,23 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 
-# ---------------- Helpers ----------------
+
 def clean_label(x: str) -> str:
     x = str(x).lower()
     # Replace multiple spaces, tabs, non-breaking spaces, etc. with a single space
     x = re.sub(r"\s+", " ", x, flags=re.UNICODE)
     return x.strip()
 
-# ---------------- Load & prep ----------------
+
 df = pd.read_csv("all-items.csv", skipinitialspace=True)
 
-print("\n🔍 Unique categories BEFORE cleaning:")
+print("\n Unique categories BEFORE cleaning:")
 print(df["category"].unique())
 
 # Normalize categories
 df["category"] = df["category"].apply(clean_label)
 
-print("\n✅ Unique categories AFTER cleaning:")
+print("\n Unique categories AFTER cleaning:")
 print(df["category"].unique())
 
 # Stratified split so each class appears in train/test
@@ -103,10 +103,10 @@ for item, actual_category in test_pairs:
     predicted_labels.append(clean_label(pred))
 
 # ---------------- Sanity checks ----------------
-print("\n📌 Unique TRUE labels :", sorted(set(true_labels)))
-print("📌 Unique PRED labels :", sorted(set(predicted_labels)))
-print("📌 Pred-only classes  :", set(predicted_labels) - set(true_labels))
-print("📌 True-only classes  :", set(true_labels) - set(predicted_labels))
+print("\nUnique TRUE labels :", sorted(set(true_labels)))
+print(" Unique PRED labels :", sorted(set(predicted_labels)))
+print("Pred-only classes  :", set(predicted_labels) - set(true_labels))
+print("True-only classes  :", set(true_labels) - set(predicted_labels))
 
 # ---------------- Metrics ----------------
 accuracy  = accuracy_score(true_labels, predicted_labels)
@@ -119,13 +119,13 @@ metrics_table = pd.DataFrame({
     "Score":  [accuracy, precision, recall, f1]
 })
 
-print("\n📊 Model Evaluation Metrics (Macro Avg):\n")
+print("\nModel Evaluation Metrics (Macro Avg):\n")
 print(metrics_table.to_string(index=False, float_format="%.3f"))
 
 report_df = pd.DataFrame(classification_report(
     true_labels, predicted_labels, output_dict=True, zero_division=0
 )).transpose()
-print("\n📊 Classification Report (Per Class):\n")
+print("\nClassification Report (Per Class):\n")
 print(report_df.round(3))
 
 # ---------------- Confusion Matrix ----------------
@@ -144,4 +144,4 @@ plt.xticks(rotation=90)
 plt.yticks(rotation=0)
 plt.tight_layout()
 plt.savefig('confusion_matrix.png', dpi=200)
-print("\n✅ Confusion matrix saved as confusion_matrix.png")
+print("\nConfusion matrix saved as confusion_matrix.png")

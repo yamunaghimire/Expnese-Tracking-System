@@ -15,6 +15,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!formData.email || !formData.password) {
+    toast.error("Please fill in all fields");
+    return;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.email)) {
+    toast.error("Please enter a valid email address");
+    return;
+  }
+
+  if (formData.password.length < 6) {
+    toast.error("Password must be at least 6 characters long");
+    return;
+  }
+
 
     try {
       const response = await fetch("http://localhost:5000/api/login", {
@@ -55,7 +71,6 @@ const Login = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email"
-            required
             className="w-full bg-gray-100 text-gray-700 rounded-xl px-4 py-3 pr-10 placeholder-gray-500"
           />
           <FiUser className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -69,7 +84,6 @@ const Login = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Password"
-            required
             className="w-full bg-gray-100 text-gray-700 rounded-xl px-4 py-3 pr-10 placeholder-gray-500"
           />
           <FiLock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -79,7 +93,6 @@ const Login = () => {
           <button type="button" onClick={() => navigate("/forgot-password")}>Forgot Password</button>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-teal-500 text-white font-semibold py-3 rounded-xl mb-6"
@@ -88,7 +101,7 @@ const Login = () => {
         </button>
       </form>
 
-      {/* Sign Up Link */}
+      
       <p className="text-sm text-black">
         Don’t have an account?{" "}
         <span
