@@ -6,7 +6,6 @@ import BottomNavBar from '../components/BottomNavbar';
 import SpendingTrendChart from '../components/SpendingTrendChart';
 import BudgetBreakdown from '../components/BudgetBreakdown';
 import BudgetOverviewBanner from '../components/BudgetOverviewBanner';
-import PlanInsightsButtons from '../components/PlanInsightsButtons';
 import PageHeader from '../components/PageHeader';
 
 export default function Homepage() {

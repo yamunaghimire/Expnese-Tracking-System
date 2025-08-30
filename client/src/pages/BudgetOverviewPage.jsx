@@ -115,7 +115,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BudgetVisualizer from "../components/BudgetVisualizer";
 import { useNavigate } from "react-router-dom";
-import BudgetTopTabs from "../components/BudgetTopTabs";
 import BottomNavBar from "../components/BottomNavbar";
 import PageHeader from "../components/PageHeader";
 import { FiArrowLeft, FiCalendar } from "react-icons/fi";

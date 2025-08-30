@@ -4,7 +4,7 @@ import { FiShoppingBag } from 'react-icons/fi';
 
 const SpendingCard = () => {
   const [amount, setAmount] = useState(null);
-  const [error, setError] = useState(null);  // Track error
+  const [error, setError] = useState(null);  
 
   useEffect(() => {
     const fetchAmount = async () => {

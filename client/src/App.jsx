@@ -50,7 +50,7 @@ import ResetPassword from './pages/ResetPassword';
 import PrivateRoute from './components/PrivateRoute';
 
 export default function App() {
-  // Check if user is authenticated
+  
   const token = localStorage.getItem("access_token");
 
   return (

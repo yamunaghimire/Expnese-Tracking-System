@@ -43,15 +43,15 @@ const SpendingTrendChart = () => {
   }, []);
 
   const chartData = {
-    labels: data.map(d => d.month.slice(0, 3)), // ['Jan', 'Feb', ...]
+    labels: data.map(d => d.month.slice(0, 3)), // for months name
     datasets: [
       {
         label: "Spending",
         data: data.map(d => d.amount),
-        borderColor: "#22C55E",           // green
-        backgroundColor: "#22C55E",       // dot color
+        borderColor: "#22C55E",           // green border
+        backgroundColor: "#22C55E",       //for dot color
         borderWidth: 2,
-        tension: 0.4,                     // smooth curve
+        tension: 0.4,   // for smooth curve
         pointRadius: 5,
         pointHoverRadius: 6,
         fill: false,

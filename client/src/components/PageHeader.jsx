@@ -7,7 +7,7 @@ const PageHeader = ({
   actionText, 
   actionIcon: ActionIcon = FiPlus,
   onAction,
-  actionButtonStyle = "default" // "default", "outline", "primary"
+  actionButtonStyle = "default" 
 }) => {
   const getButtonClasses = () => {
     switch (actionButtonStyle) {

@@ -214,11 +214,11 @@ const handleSaveReceipt = async () => {
       </div>
 
       {/* Save Button */}
-      <div className="fixed bottom-20 left-4 right-4 z-40">
+      <div className="max-w-xs mx-auto  bottom-20 left-4 right-4 z-40">
         <button
           onClick={handleSaveReceipt}
           disabled={loading}
-          className="w-full bg-green-500 text-white py-3 rounded-xl font-semibold shadow hover:bg-green-600"
+          className="w-full  bg-green-500 text-white py-4 rounded-xl font-semibold shadow hover:bg-green-600"
         >
           {loading ? 'Saving...' : 'Save Receipt'}
         </button>
