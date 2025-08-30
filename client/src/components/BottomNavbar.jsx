@@ -19,7 +19,7 @@ const handleProfileClick = () => {
     navigate("/receipts");
   };
   return (
-   <div className="fixed bottom-0 left-0 right-0 z-50 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] py-3 flex justify-around items-center">
+   <div className="max-w-md mx-auto fixed bottom-0 left-0 right-0 z-50 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] py-3 flex justify-around items-center">
       <div className="flex flex-col items-center text-purple-500">
         <FiHome className="text-xl" onClick={handleHomeClick}/>
         <span className="text-xs mt-1">Home</span>
