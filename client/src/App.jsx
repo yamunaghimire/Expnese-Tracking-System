@@ -54,7 +54,7 @@ export default function App() {
   const token = localStorage.getItem("access_token");
 
   return (
-    <div className='max-w-md mx-auto'>
+    <div className='max-w-md mx-auto shadow-lg'>
       <Router>
         <Routes>
           <Route path="/login" element={token ? <Navigate to="/" replace /> : <Login />} />

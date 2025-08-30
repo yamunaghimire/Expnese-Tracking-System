@@ -95,7 +95,7 @@ const EditableForm = ({ data, setData, handleConfirm, handleClose }) => {
 
           <button
             onClick={handleAddItem}
-            className="w-[100px] mt-4  bg-gray-200  text-center py-2  hover:bg-blue-600 transition"
+            className="w-[100px] mt-4  bg-gray-200  text-center py-2  hover:bg-green-600 transition"
           >
             + Add Item
           </button>

@@ -95,7 +95,7 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full bg-teal-500 text-white font-semibold py-3 rounded-xl mb-6"
+          className="w-full bg-green-500 text-white font-semibold py-3 rounded-xl mb-6"
         >
           SIGN IN
         </button>
@@ -106,7 +106,7 @@ const Login = () => {
         Don’t have an account?{" "}
         <span
           onClick={() => navigate("/signup")}
-          className="text-teal-500 font-medium cursor-pointer"
+          className="text-green-500 font-medium cursor-pointer"
         >
           Sign Up
         </span>

@@ -106,9 +106,9 @@ const handleSaveReceipt = async () => {
       <ToastContainer position="top-center" autoClose={2000} hideProgressBar />
 
       {/* Header */}
-      <div className="bg-teal-500 text-white px-4 py-4 text-center font-bold text-xl shadow-sm rounded-b-2xl">
-  Manual Entry
-</div>
+      <div className="bg-green-500 text-white px-4 py-4 text-center font-bold text-xl shadow-sm rounded-b-2xl">
+        Manual Entry
+      </div>
 
       {/* Content */}
       <div className="p-4 space-y-6">
@@ -120,27 +120,27 @@ const handleSaveReceipt = async () => {
             placeholder="Bill No."
             value={billNo}
             onChange={(e) => setBillNo(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
           <input
             type="date"
             value={billDate}
             onChange={(e) => setBillDate(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
           <input
             type="text"
             placeholder="Store name"
             value={store}
             onChange={(e) => setStore(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
           <input
             type="text"
             placeholder="Address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-400"
+            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
 
@@ -174,7 +174,7 @@ const handleSaveReceipt = async () => {
 
           <button
             onClick={handleAddOrUpdateItem}
-            className="text-sm text-teal-600 font-medium flex items-center gap-2"
+            className="text-sm text-green-600 font-medium flex items-center gap-2"
           >
             {editIndex !== null ? 'Update Item' : 'Add Item'} <FiPlus />
           </button>
@@ -192,7 +192,7 @@ const handleSaveReceipt = async () => {
                 <span>
                   {it.name} – Qty: {it.qty}, Rate: {it.rate}, Amt: {it.amt.toFixed(2)}
                 </span>
-                <div className="flex gap-2 text-teal-600 text-lg">
+                <div className="flex gap-2 text-green-600 text-lg">
                   <button onClick={() => handleEdit(idx)}><FiEdit2 /></button>
                   <button onClick={() => handleDelete(idx)}><FiTrash2 /></button>
                 </div>
@@ -218,7 +218,7 @@ const handleSaveReceipt = async () => {
         <button
           onClick={handleSaveReceipt}
           disabled={loading}
-          className="w-full bg-teal-500 text-white py-3 rounded-xl font-semibold shadow hover:bg-teal-600"
+          className="w-full bg-green-500 text-white py-3 rounded-xl font-semibold shadow hover:bg-green-600"
         >
           {loading ? 'Saving...' : 'Save Receipt'}
         </button>

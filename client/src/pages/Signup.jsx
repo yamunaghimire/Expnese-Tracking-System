@@ -123,7 +123,7 @@ const Signup = () => {
         {/* Sign Up Button */}
         <button
           type="submit"
-          className="w-full bg-teal-500 text-white font-semibold text-sm py-3 rounded-xl mt-2"
+          className="w-full bg-green-500 text-white font-semibold text-sm py-3 rounded-xl mt-2"
         >
           SIGN UP
         </button>
@@ -134,7 +134,7 @@ const Signup = () => {
             Already have an account?{" "}
             <span
               onClick={() => navigate("/login")}
-              className="text-teal-500 font-medium cursor-pointer"
+              className="text-green-500 font-medium cursor-pointer"
             >
               Sign In
             </span>

@@ -48,8 +48,8 @@ const SpendingTrendChart = () => {
       {
         label: "Spending",
         data: data.map(d => d.amount),
-        borderColor: "#A855F7",           // purple
-        backgroundColor: "#A855F7",       // dot color
+        borderColor: "#22C55E",           // green
+        backgroundColor: "#22C55E",       // dot color
         borderWidth: 2,
         tension: 0.4,                     // smooth curve
         pointRadius: 5,

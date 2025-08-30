@@ -148,7 +148,7 @@ const ResetPassword = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full bg-gray-100 text-gray-700 rounded-xl px-4 py-3 pr-10 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm"
+            className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
           />
           <FiLock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
@@ -156,7 +156,7 @@ const ResetPassword = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-teal-500 text-white font-semibold py-3 rounded-xl mb-6 hover:bg-teal-600 transition duration-300 text-sm"
+          className="w-full bg-green-500 text-white font-semibold py-3 rounded-xl mb-6 hover:bg-green-600 transition duration-300 text-sm"
         >
           {loading ? "Resetting..." : "Reset Password"}
         </button>
@@ -166,7 +166,7 @@ const ResetPassword = () => {
         Remember your password?{" "}
         <span
           onClick={() => navigate("/login")}
-          className="text-teal-500 font-medium cursor-pointer"
+          className="text-green-500 font-medium cursor-pointer"
         >
           Sign In
         </span>

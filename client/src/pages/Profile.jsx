@@ -86,7 +86,7 @@ const OptionCard = ({ icon, label, onClick }) => (
     onClick={onClick}
     className="flex items-center bg-[#f5f2ff] px-4 py-3 rounded-xl cursor-pointer"
   >
-    <div className="text-teal-500 text-xl mr-4">{icon}</div>
+    <div className="text-green-500 text-xl mr-4">{icon}</div>
     <span className="text-sm font-medium">{label}</span>
   </div>
 );

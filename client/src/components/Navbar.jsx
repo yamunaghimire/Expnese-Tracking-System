@@ -37,8 +37,8 @@ export default function Navbar() {
 
   return (
     <div className="mx-[30px] mt-4 flex justify-between items-center">
-      <div className="text-3xl mt-2 font-semibold">
-        {name ? `Hi ${name}!` : "Hi!"}
+      <div className="text-3xl mt-2 font-semibold ">
+        {name ? `Hi ${name.charAt(0).toUpperCase() + name.slice(1)}!` : "Hi!"}
       </div>
       <div className="flex items-center">
         <button

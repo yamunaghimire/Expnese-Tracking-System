@@ -1,16 +1,17 @@
 import React from 'react';
 import { FiHome, FiFileText, FiPieChart, FiUser } from 'react-icons/fi';
 import ScanActionButton from './ScanActionButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNavbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-const handleProfileClick = () => {
+  const handleProfileClick = () => {
     navigate("/profile"); 
   };
   const handleBudgetClick = () => {
-    navigate("/budget"); 
+    navigate("/view-budgets"); 
   };
   const handleHomeClick = () => {
     navigate("/"); 
@@ -18,29 +19,34 @@ const handleProfileClick = () => {
   const handleReceiptsClick = () => {
     navigate("/receipts");
   };
+
+  const isActive = (path) => {
+    if (path === "/" && location.pathname === "/") return true;
+    if (path === "/budget" && (location.pathname.startsWith("/budget") || location.pathname.startsWith("/view-budgets"))) return true;
+    if (path !== "/" && path !== "/budget" && location.pathname.startsWith(path)) return true;
+    return false;
+  };
+
   return (
-   <div className="max-w-md mx-auto fixed bottom-0 left-0 right-0 z-50 bg-white shadow-[0_-2px_10px_rgba(0,0,0,0.05)] py-3 flex justify-around items-center">
-      <div className="flex flex-col items-center text-purple-500">
-        <FiHome className="text-xl" onClick={handleHomeClick}/>
-        <span className="text-xs mt-1">Home</span>
+    
+   <div className="max-w-md mx-auto fixed bottom-4 left-4 right-4 z-50 bg-white shadow-lg rounded-full py-5 px-6 flex justify-around items-center border border-gray-100">
+      <div className={`flex flex-col items-center cursor-pointer hover:scale-110 transition-transform ${isActive("/") ? "text-green-500" : "text-gray-400"}`}>
+        <FiHome className="text-3xl" onClick={handleHomeClick}/>
       </div>
 
-      <div className="flex flex-col items-center text-gray-400 ">
-        <FiFileText className="text-xl"  onClick={handleReceiptsClick}/>
-        <span className="text-xs mt-1">Receipts</span>
+      <div className={`flex flex-col items-center cursor-pointer hover:scale-110 transition-transform ${isActive("/receipts") ? "text-green-500" : "text-gray-400"}`}>
+        <FiFileText className="text-3xl"  onClick={handleReceiptsClick}/>
       </div>
 
       {/* Central Scan Button */}
       <ScanActionButton />
 
-      <div className="flex flex-col items-center text-gray-400">
-        <FiPieChart className="text-xl" onClick={handleBudgetClick} />
-        <span className="text-xs mt-1">Budget</span>
+      <div className={`flex flex-col items-center cursor-pointer hover:scale-110 transition-transform ${isActive("/budget") ? "text-green-500" : "text-gray-400"}`}>
+        <FiPieChart className="text-3xl" onClick={handleBudgetClick} />
       </div>
 
-      <div className="flex flex-col items-center text-gray-400" >
-        <FiUser className="text-xl" onClick={handleProfileClick}/>
-        <span className="text-xs mt-1">Profile</span>
+      <div className={`flex flex-col items-center cursor-pointer hover:scale-110 transition-transform ${isActive("/profile") ? "text-green-500" : "text-gray-400"}`}>
+        <FiUser className="text-3xl" onClick={handleProfileClick}/>
       </div>
     </div>
   );

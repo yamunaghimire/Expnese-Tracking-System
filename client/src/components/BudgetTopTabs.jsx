@@ -42,7 +42,7 @@ const BudgetTopTabs = () => {
   const isInsights = location.pathname === "/view-budgets";
 
   return (
-    <div className="w-full bg-teal-500 px-4 py-4 sticky top-0 z-40 shadow-sm rounded-b-2xl">
+    <div className="w-full bg-green-500 px-4 py-4 sticky top-0 z-40 shadow-sm rounded-b-2xl">
       <div className="flex justify-center gap-2">
         <button
           onClick={() => navigate("/budget")}

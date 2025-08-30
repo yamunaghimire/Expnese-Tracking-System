@@ -117,6 +117,8 @@ import BudgetVisualizer from "../components/BudgetVisualizer";
 import { useNavigate } from "react-router-dom";
 import BudgetTopTabs from "../components/BudgetTopTabs";
 import BottomNavBar from "../components/BottomNavbar";
+import PageHeader from "../components/PageHeader";
+import { FiArrowLeft, FiCalendar } from "react-icons/fi";
 
 const months = [
   "January", "February", "March", "April",
@@ -163,36 +165,56 @@ const BudgetOverviewPage = () => {
 
   return (
     <div className="min-h-screen bg-white flex flex-col pb-24">
-      {/* Header */}
-      <div className="bg-teal-500 text-white px-4 py-4 text-center font-bold text-xl shadow-sm rounded-b-2xl">
-        Monthly Budget Overview
+      {/* Page Header with Back Button */}
+      <div className="px-4 py-6">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition-all duration-200 hover:scale-105 shadow-sm"
+          >
+            <FiArrowLeft className="w-5 h-5" />
+          </button>
+          <div className="flex-1">
+            <PageHeader
+              title="Monthly Budget Overview"
+              subtitle="Track your budget vs. actual spending"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Month Selector + Insights */}
-      <div className="flex-1 p-4 max-w-xl mx-auto">
+      <div className="flex-1 px-4 max-w-xl mx-auto">
         {/* Month Selector */}
-        <div className="flex items-center justify-between bg-gray-100 rounded-full py-2 px-5 mb-6">
-          <button
-            onClick={() => {
-              const currentIndex = months.indexOf(month);
-              if (currentIndex > 0) setMonth(months[currentIndex - 1]);
-            }}
-            className="text-xl text-gray-700"
-          >
-            &lt;
-          </button>
-          <span className="text-lg font-medium text-gray-900">
-            {month ? `${month} 2025` : "Select Month"}
-          </span>
-          <button
-            onClick={() => {
-              const currentIndex = months.indexOf(month);
-              if (currentIndex < months.length - 1) setMonth(months[currentIndex + 1]);
-            }}
-            className="text-xl text-gray-700"
-          >
-            &gt;
-          </button>
+        <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => {
+                const currentIndex = months.indexOf(month);
+                if (currentIndex > 0) setMonth(months[currentIndex - 1]);
+              }}
+              className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={months.indexOf(month) === 0}
+            >
+              &lt;
+            </button>
+            <div className="flex items-center gap-3">
+              <FiCalendar className="w-6 h-6 text-green-600" />
+              <span className="text-xl font-semibold text-gray-900">
+                {month ? `${month} 2025` : "Select Month"}
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                const currentIndex = months.indexOf(month);
+                if (currentIndex < months.length - 1) setMonth(months[currentIndex + 1]);
+              }}
+              className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={months.indexOf(month) === months.length - 1}
+            >
+              &gt;
+            </button>
+          </div>
         </div>
 
         {/* Visualizer */}

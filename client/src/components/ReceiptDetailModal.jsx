@@ -5,19 +5,18 @@ const ReceiptDetailModal = ({ receipt, onClose }) => {
   if (!receipt) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="relative bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg p-6">
-        {/* Close Button
+    <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/80 ">
+      <div className="relative bg-white rounded-lg max-w-md w-full mx-4 shadow-lg p-6">
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-          aria-label="Close Modal"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
         >
-          <FiX className="text-2xl" />
-        </button> */}
+          <FiX className="text-xl" />
+        </button>
 
         {/* Header */}
-        <h2 className="text-2xl font-bold text-center text-black mb-4">
+        <h2 className="text-xl font-bold text-gray-900 mb-4 pr-8">
           {receipt.merchant_name}
         </h2>
 
@@ -27,55 +26,47 @@ const ReceiptDetailModal = ({ receipt, onClose }) => {
             <img
               src={`http://localhost:5000/${receipt.image_path}`}
               alt="Receipt"
-              className="w-full rounded-md border shadow-sm"
+              className="w-full rounded border"
               onError={(e) => (e.target.style.display = 'none')}
             />
           </div>
         )}
 
-        {/* Details */}
-        <div className="text-sm text-gray-700 space-y-1 mb-6">
-          <p><span className="font-medium">Address:</span> {receipt.address}</p>
-          <p><span className="font-medium">Bill Number:</span> {receipt.bill_number}</p>
-          <p><span className="font-medium">Date:</span> {new Date(receipt.bill_date).toLocaleDateString()}</p>
-          <p><span className="font-medium">Total Amount:</span> Rs {receipt.total_amount}</p>
-        </div>
-
-        {/* Items Table */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-600 mb-2">Items</h3>
-          <div className="overflow-x-auto rounded-md shadow border">
-            <table className="min-w-full text-sm text-left">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="py-2 px-3 font-medium text-gray-700">Item</th>
-                  <th className="py-2 px-3 font-medium text-gray-700">Qty</th>
-                  <th className="py-2 px-3 font-medium text-gray-700">Rate</th>
-                  <th className="py-2 px-3 font-medium text-gray-700">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {receipt.items && receipt.items.length > 0 ? (
-                  receipt.items.map((item, idx) => (
-                    <tr key={idx} className="border-t">
-                      <td className="py-2 px-3">{item.name}</td>
-                      <td className="py-2 px-3">{item.quantity}</td>
-                      <td className="py-2 px-3">Rs {item.rate}</td>
-                      <td className="py-2 px-3">Rs {item.amount}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr><td className="py-2 px-3" colSpan="4">No items found.</td></tr>
-                )}
-              </tbody>
-            </table>
+        {/* Bill Details */}
+        <div className="space-y-3 mb-4">
+          <div className="flex justify-between">
+            <span className="text-gray-600">Date:</span>
+            <span className="font-medium">{new Date(receipt.bill_date).toLocaleDateString()}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Bill Number:</span>
+            <span className="font-medium">{receipt.bill_number}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Total Amount:</span>
+            <span className="font-bold text-lg text-green-600">Rs {receipt.total_amount}</span>
           </div>
         </div>
 
-        {/* Optional Footer Button */}
+        {/* Items */}
+        {receipt.items && receipt.items.length > 0 && (
+          <div>
+            <h3 className="font-semibold text-gray-800 mb-2">Items</h3>
+            <div className="space-y-2">
+              {receipt.items.map((item, idx) => (
+                <div key={idx} className="flex justify-between text-sm border-b border-gray-100 pb-2">
+                  <span className="text-gray-700">{item.name}</span>
+                  <span className="text-gray-600">Rs {item.amount}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="mt-6 w-full bg-teal-500 text-white py-2 rounded-lg hover:bg-teal-600 transition"
+          className="mt-6 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
         >
           Close
         </button>

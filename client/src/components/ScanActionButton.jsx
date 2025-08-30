@@ -116,7 +116,7 @@ const ScanActionButton = () => {
       />
 
       <button
-        className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-purple-500 p-4 rounded-full text-white shadow-lg z-10"
+        className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-green-500 p-4 rounded-full text-white shadow-lg z-10"
         onClick={() => setShowOptions(!showOptions)}
       >
         <MdDocumentScanner className="text-2xl" />
