@@ -36,6 +36,7 @@
 // }
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Homepage from './pages/Homepage';
@@ -50,8 +51,23 @@ import ResetPassword from './pages/ResetPassword';
 import PrivateRoute from './components/PrivateRoute';
 
 export default function App() {
-  
-  const token = localStorage.getItem("access_token");
+  const [token, setToken] = useState(localStorage.getItem("access_token"));
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("access_token"));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom logout event
+    window.addEventListener('logout', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('logout', handleStorageChange);
+    };
+  }, []);
 
   return (
     <div className='max-w-md mx-auto shadow-lg'>

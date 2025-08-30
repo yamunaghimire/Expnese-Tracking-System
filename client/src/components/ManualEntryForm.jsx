@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FiEdit2, FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiEdit2, FiPlus, FiTrash2, FiArrowLeft } from 'react-icons/fi';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BottomNavBar from '../components/BottomNavbar';
+import { useNavigate } from 'react-router-dom';
 
 const ManualEntryPage = () => {
   const [billNo, setBillNo] = useState('');
@@ -15,6 +16,7 @@ const ManualEntryPage = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const calculateAmount = (qty, rate) => {
     const q = parseFloat(qty);
@@ -105,9 +107,20 @@ const handleSaveReceipt = async () => {
     <div className="min-h-screen bg-gray-50 pb-24">
       <ToastContainer position="top-center" autoClose={2000} hideProgressBar />
 
-      {/* Header */}
-      <div className="bg-green-500 text-white px-4 py-4 text-center font-bold text-xl shadow-sm rounded-b-2xl">
-        Manual Entry
+      {/* Page Header with Back Button */}
+      <div className="px-4 py-6">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center justify-center transition-all duration-200 hover:scale-105 shadow-sm"
+          >
+            <FiArrowLeft className="w-5 h-5" />
+          </button>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-gray-900">Manual Entry</h1>
+            <p className="text-sm text-gray-600 mt-1">Add receipt details manually</p>
+          </div>
+        </div>
       </div>
 
       {/* Content */}
@@ -168,7 +181,7 @@ const handleSaveReceipt = async () => {
               placeholder="Rate"
               value={item.rate}
               onChange={(e) => setItem({ ...item, rate: e.target.value })}
-              className="w-1/2 px-4 py-2 rounded-xl bg-gray-100 focus:outline-none"
+              className="w-full px-4 py-2 rounded-xl bg-gray-100 focus:outline-none"
             />
           </div>
 

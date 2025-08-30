@@ -9,7 +9,7 @@ import BudgetOverviewBanner from '../components/BudgetOverviewBanner';
 import PageHeader from '../components/PageHeader';
 
 export default function Homepage() {
-  const [selectedMonth, setSelectedMonth] = useState("July");
+  const [selectedMonth, setSelectedMonth] = useState("August");
 
   return (
     <div className="min-h-screen flex flex-col">

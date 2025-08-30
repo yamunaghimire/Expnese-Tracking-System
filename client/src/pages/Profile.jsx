@@ -67,6 +67,8 @@ const Profile = () => {
             label="Logout"
             onClick={() => {
               localStorage.removeItem('access_token');
+              // Dispatch custom event to notify App component
+              window.dispatchEvent(new Event('logout'));
               navigate('/login');
             }}
           />

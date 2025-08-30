@@ -55,10 +55,26 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-6 bg-white">
-      <ToastContainer />
+      <ToastContainer 
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover={false}
+        toastClassName="max-w-md mx-auto"
+        toastStyle={{
+          maxWidth: '448px', 
+          margin: '0 auto'
+        }}
+      />
 
       {/* Heading */}
-      <h1 className="text-5xl font-extrabold text-orange-500 mb-2">Hello!</h1>
+      <h1 className="text-5xl font-extrabold text-orange-500 mb-2">Monetra</h1>
       <p className="text-sm text-black mb-8">Sign in into your account</p>
 
       {/* Form */}
@@ -89,8 +105,8 @@ const Login = () => {
           <FiLock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
 
-        <div className="text-right text-sm text-gray-500 mb-6">
-          <button type="button" onClick={() => navigate("/forgot-password")}>Forgot Password</button>
+        <div className="text-right text-sm text-blue-400 mb-6">
+          <button type="button" onClick={() => navigate("/forgot-password")}>Forgot Password?</button>
         </div>
 
         <button

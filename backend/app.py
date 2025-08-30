@@ -1,8 +1,6 @@
 from flask import Flask, request, abort, jsonify, send_from_directory
 import os
 import pandas as pd
-
-# import spacy
 import re
 import json
 from flask_cors import CORS
