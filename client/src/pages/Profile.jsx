@@ -54,7 +54,7 @@ const Profile = () => {
 
         
         <div className="mt-10 space-y-6">
-          <OptionCard icon={<LuSettings />} label="Account Settings" />
+          <OptionCard icon={<LuSettings />} label="View My Receipts" onClick={() => navigate('/receipts')} />
           <OptionCard
               icon={<GrPlan />}
               label="View Budget Plan"
